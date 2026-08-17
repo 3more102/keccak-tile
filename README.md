@@ -10,7 +10,9 @@ A passing testbench proves the environment didn't complain, not that the design 
 
 ## Architecture
 
-One full round (theta→rho→pi→chi→iota) per clock cycle. 24 cycles for the permutation; the 1600-bit state is loaded and read back through Tiny Tapeout's narrow GPIO budget via a byte-addressed register interface, so a full load+permute+unload operation is dominated by I/O, not compute. Full register map and protocol: [`docs/SPEC.md`](docs/SPEC.md) (coming in the next commit).
+One full round (theta→rho→pi→chi→iota) per clock cycle. 24 cycles for the permutation; the 1600-bit state is loaded and read back through Tiny Tapeout's narrow GPIO budget via a byte-addressed register interface, so a full load+permute+unload operation is dominated by I/O, not compute. Full register map and protocol: [`docs/SPEC.md`](docs/SPEC.md).
+
+A real synthesis spike against sky130hd (state register + round datapath, not yet the full bus interface) measured **122,476 um² (~32.6k gate-equivalents)** — see [`docs/AREA_SPIKE.md`](docs/AREA_SPIKE.md) for the full breakdown, including why that number is actually better news for Tiny Tapeout tile count than it first looks.
 
 ## Layout
 

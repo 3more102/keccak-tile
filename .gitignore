@@ -18,6 +18,7 @@ sim/work/
 synth_work/
 asic/work/
 asic/*/results/
+scripts/spike_results/
 *.gds
 *.def
 *.odb
