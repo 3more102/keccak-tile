@@ -1,0 +1,38 @@
+# Python
+__pycache__/
+*.pyc
+.venv/
+
+# Simulation
+*.vvp
+*.vcd
+*.wlf
+transcript
+work/
+sim/build/
+sim/work/
+
+# Synthesis / physical implementation
+*.log
+!docs/**/*.log
+synth_work/
+asic/work/
+asic/*/results/
+*.gds
+*.def
+*.odb
+*.spef
+
+# Vivado/Questa/ModelSim cruft
+.Xil/
+xsim.dir/
+*.jou
+*.wdb
+vivado.log
+build_xsim/
+*.qdb
+
+# Reports (regenerated, not committed)
+results/*.md
+results/*.json
+!results/.gitkeep
