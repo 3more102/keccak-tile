@@ -2,7 +2,7 @@
 
 A Keccak-f[1600] permutation core — the sponge permutation behind SHA3/SHAKE (FIPS 202) and reused throughout ML-KEM/Kyber (FIPS 203) and ML-DSA/Dilithium (FIPS 204) for hashing, expansion, and sampling — designed, verified, and carried through physical implementation toward a real [Tiny Tapeout](https://tinytapeout.com/) silicon submission.
 
-**Status: early build. RTL and verification are not done yet — this README will be updated as each stage lands, and nothing here should be read as a finished claim until it has a passing check behind it.**
+**Status: early build.** Golden model done and validated against official reference vectors. RTL and hardware verification are not done yet — this README will be updated as each stage lands, and nothing here should be read as a finished claim until it has a passing check behind it.
 
 ## Why this exists
 
@@ -22,9 +22,32 @@ scripts/  Mutation campaign, regression, and equivalence-proof drivers
 docs/     Spec, verification plan, and results write-ups
 ```
 
+## Golden model
+
+`model/keccak_f1600.py` implements the permutation from the FIPS 202 spec —
+including deriving its own round constants (LFSR generator) and rho offsets
+(triangular-number walk) algorithmically, rather than only hand-transcribing
+published tables. Both derivations, and every one of theta/rho/pi/chi/iota
+for all 24 rounds of two chained permutations, are cross-checked bit-for-bit
+against [XKCP's official reference vectors](model/vectors/KeccakF-1600-IntermediateValues.txt) —
+run it yourself:
+
+```
+python3 model/validate_against_xkcp.py
+```
+
+Checking *every step*, not just final output, matters here specifically: a
+transposed rho offset or pi index is invisible to an all-zero test vector
+(rotating or permuting zero is still zero) and can pass a self-consistent
+check while silently disagreeing with the spec. See
+[`docs/VECTOR_FORMAT.md`](docs/VECTOR_FORMAT.md) for how the vector file's
+state-grid layout was determined empirically rather than assumed, for
+exactly that reason.
+
 ## Documentation
 
-- `docs/SPEC.md` — register map and bus protocol (coming)
+- [`docs/SPEC.md`](docs/SPEC.md) — register map and bus protocol
+- [`docs/VECTOR_FORMAT.md`](docs/VECTOR_FORMAT.md) — how the XKCP vector file's layout was determined
 - `docs/VERIF_PLAN.md` — verification tiers and mutation methodology (coming)
 - `docs/RESULTS.md` — numbers, as they land (coming)
 
